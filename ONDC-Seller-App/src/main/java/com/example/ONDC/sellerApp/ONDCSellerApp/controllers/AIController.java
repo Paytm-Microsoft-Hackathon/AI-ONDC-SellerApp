@@ -9,11 +9,14 @@ import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionRequestFlowt
 import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.core.io.Resource;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
+
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.*;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.BASE_URL;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.ENHANCE_TITLE;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.GENERATE_ADDITIONAL_DESCRIPTION;
@@ -36,6 +39,11 @@ public class AIController {
     return response;
   }
 
+  @PostMapping(REMOVE_BACKGROUND)
+  public Resource generateImage(@RequestPart List<MultipartFile> file) throws ONDCProductException, IOException {
+    return aiService.removeBackGround(file.get(0));
+  }
+
   @GetMapping(ENHANCE_TITLE)
   public GenericGenerateResponse<CommonDescriptionResponse> enhanceTitle(
       @RequestParam(name = "title") String title) throws ONDCProductException {
@@ -44,6 +52,20 @@ public class AIController {
         chatCompletionServiceFactory
             .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_TITLE)
             .getChatCompletionRecommendation(title, null);
+    log.info("[enhanceDescription] Response: {}", response);
+    return  response;
+  }
+
+  @GetMapping(ENHANCE_DESCRIPTION)
+  public GenericGenerateResponse<CommonDescriptionResponse> enhanceDescription(
+    @RequestParam(name = "title") String title,
+    @RequestParam(name = "category") Integer category) throws ONDCProductException {
+
+    log.info("[enhanceDescription] Request title: {}", title);
+    GenericGenerateResponse<CommonDescriptionResponse> response =
+      chatCompletionServiceFactory
+        .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_DESCRIPTION)
+        .getChatCompletionRecommendation(title,category);
     log.info("[enhanceDescription] Response: {}", response);
     return  response;
   }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class ChatCompletionServiceFactory {
 
   @Autowired private EnhanceTitleService enhanceTitleService;
+  @Autowired private EnhanceDescriptionService enhanceDescriptionService;
   @Autowired private GenerateDescriptionService generateDescriptionService;
   @Autowired private GenerateAdditionalDescriptionService generateAdditionalDescriptionService;
 
@@ -19,7 +20,7 @@ public class ChatCompletionServiceFactory {
       case ENHANCE_TITLE -> enhanceTitleService;
       case GENERATE_DESCRIPTION -> generateDescriptionService;
       case GENERATE_ADDITIONAL_DESCRIPTION -> generateAdditionalDescriptionService;
-      // case ENHANCE_DESCRIPTION :
+      case ENHANCE_DESCRIPTION -> enhanceDescriptionService;
       default -> throw new IllegalArgumentException("Something went wrong, Please try again");
     };
   }
