@@ -21,4 +21,11 @@ public class ONDCProductException extends Exception {
     this.status = productException.getStatus();
     this.code = productException.getCode();
   }
+
+  public ONDCProductException(final String message) {
+    super(message);
+    this.message = message;
+    this.status = HttpStatus.INTERNAL_SERVER_ERROR;
+  }
+
 }
