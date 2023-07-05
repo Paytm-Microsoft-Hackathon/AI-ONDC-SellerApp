@@ -14,6 +14,7 @@ public class Constants {
 
   public static class ProductControllerConstants {
     public static final String PRODUCT_BASE_URL = "/api/v1/product";
+    public static final String SUCCESS = "SUCCESS";
   }
 
   public static class PromtGenerationConstants {
