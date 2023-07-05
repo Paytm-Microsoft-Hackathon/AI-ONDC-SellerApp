@@ -9,13 +9,15 @@ import java.util.Arrays;
 
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.PromtGenerationConstants.SYSTEM_ROLE;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.PromtGenerationConstants.USER_ROLE;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_OUTPUT;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_OUTPUT_V2;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.GENERATE_DESCRIPTION_SHORT_LEARNING_INPUT;
-import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.GENERATE_DESCRIPTION_SHORT_LEARNING_OUTPUT;
-import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.GENERATE_DESCRIPTION_TONALITY_SETUP;
 
 @Slf4j
 @Service
-public class GenerateDescriptionService extends CommonChatCompletionService {
+public class GenerateAdditionalDescriptionService extends CommonChatCompletionService {
   @Override
   public int getMaxTokenSize() {
     return 600;
@@ -27,9 +29,11 @@ public class GenerateDescriptionService extends CommonChatCompletionService {
       .maxTokens(tokenSize)
       .messages(
         Arrays.asList(
-          AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_DESCRIPTION_TONALITY_SETUP.getValue()).build(),
+          AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP.getValue()).build(),
           AIShortLearningDTO.builder().role(USER_ROLE).content(GENERATE_DESCRIPTION_SHORT_LEARNING_INPUT.getValue()).build(),
-          AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_DESCRIPTION_SHORT_LEARNING_OUTPUT.getValue()).build(),
+          AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_OUTPUT.getValue()).build(),
+          AIShortLearningDTO.builder().role(USER_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT.getValue()).build(),
+          AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_OUTPUT_V2.getValue()).build(),
           AIShortLearningDTO.builder().role(USER_ROLE).content(description).build()
         )
       )

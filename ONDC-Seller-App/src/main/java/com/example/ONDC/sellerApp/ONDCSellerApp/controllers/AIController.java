@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.BASE_URL;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.ENHANCE_TITLE;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.GENERATE_ADDITIONAL_DESCRIPTION;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.GENERATE_DESCRIPTION;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.GENERATE_IMAGE;
 
@@ -56,6 +57,18 @@ public class AIController {
         .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.GENERATE_DESCRIPTION)
         .getChatCompletionRecommendation(title, category);
     log.info("[generateDescription] Response: {}", response);
+    return response;
+  }
+
+  @GetMapping(GENERATE_ADDITIONAL_DESCRIPTION)
+  public GenericGenerateResponse<CommonDescriptionResponse> generateAdditionalDescription(
+    @RequestParam(name = "title") String title,
+    @RequestParam(name = "category") Integer category) throws ONDCProductException {
+    GenericGenerateResponse<CommonDescriptionResponse> response =
+      chatCompletionServiceFactory
+        .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.GENERATE_ADDITIONAL_DESCRIPTION)
+        .getChatCompletionRecommendation(title, category);
+    log.info("[generateAdditionalDescription] Response: {}", response);
     return response;
   }
 }
