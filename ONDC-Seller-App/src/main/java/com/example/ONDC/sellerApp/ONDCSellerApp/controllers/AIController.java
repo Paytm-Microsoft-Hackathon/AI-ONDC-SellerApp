@@ -37,8 +37,10 @@ public class AIController {
   public GenericGenerateResponse<CommonDescriptionResponse> enhanceDescription(
       @RequestParam(name = "title") String title) throws ONDCProductException {
     log.info("[enhanceDescription] Request title: {}", title);
-    GenericGenerateResponse<CommonDescriptionResponse> response =  chatCompletionServiceFactory.getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_TITLE.ENHANCE_TITLE)
-        .getChatCompletionRecommendation(title);
+    GenericGenerateResponse<CommonDescriptionResponse> response =
+        chatCompletionServiceFactory
+            .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_TITLE)
+            .getChatCompletionRecommendation(title);
     log.info("[enhanceDescription] Response: {}", response);
     return  response;
   }
