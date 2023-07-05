@@ -7,6 +7,9 @@ public class Constants {
   public static final String API_KEY = "api-key";
   public static final String API_VERSION = "api-version";
   public static final String ENHANCE_TITLE = "/enhance/title";
+  public static final String CHAT_COMPLETION_API_VERSION = "2023-03-15-preview";
+  public static final String CONTENT_TYPE = "Content-Type";
+  public static final String APPLICATION_JSON = "application/json";
 
   public static class ProductControllerConstants {
     public static final String PRODUCT_BASE_URL = "/api/v1/product";

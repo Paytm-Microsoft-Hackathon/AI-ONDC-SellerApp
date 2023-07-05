@@ -34,7 +34,7 @@ public class AIController {
   }
 
   @GetMapping(ENHANCE_TITLE)
-  public GenericGenerateResponse<CommonDescriptionResponse> enhanceDescription(
+  public GenericGenerateResponse<CommonDescriptionResponse> enhanceTitle(
       @RequestParam(name = "title") String title) throws ONDCProductException {
     log.info("[enhanceDescription] Request title: {}", title);
     GenericGenerateResponse<CommonDescriptionResponse> response =

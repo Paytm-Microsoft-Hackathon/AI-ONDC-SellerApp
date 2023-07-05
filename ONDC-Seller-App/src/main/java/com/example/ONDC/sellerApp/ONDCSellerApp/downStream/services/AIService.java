@@ -1,5 +1,8 @@
 package com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services;
 
+import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.AIChatCompletionRequest;
+import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.ChatCompletionResponse;
+import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.CommonDescriptionResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenerateImageRestApiImageRequest;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenerateImageRestApiImageResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenericGenerateResponse;
@@ -12,18 +15,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.API_KEY;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.API_VERSION;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.APPLICATION_JSON;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.CHAT_COMPLETION_API_VERSION;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.CONTENT_TYPE;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.OPEN_AI_IMAGE_REDIRECTION_URL;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.AzureEndpoints.CHAT_COMPLETION;
 
 @Slf4j
 @Service
@@ -61,5 +71,16 @@ public class AIService {
     List<String> imageUrlList = new ArrayList<>();
     responseData.getResult().getData().forEach(imageUrl -> imageUrlList.add(imageUrl.getUrl()));
     return new GenericGenerateResponse<>(new ImageData(imageUrlList));
+  }
+
+  public ChatCompletionResponse chatCompletionAI(AIChatCompletionRequest request) throws ONDCProductException {
+    Map<String, String> headers = new HashMap<>();
+    headers.put(API_KEY, apiKey);
+    headers.put(CONTENT_TYPE, APPLICATION_JSON);
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.put(API_VERSION, Collections.singletonList(CHAT_COMPLETION_API_VERSION));
+    return
+        restTemplateService.executePostRequestV2(
+            CHAT_COMPLETION.getValue(), ChatCompletionResponse.class, request, headers, params);
   }
 }

@@ -6,13 +6,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -58,5 +64,39 @@ public class RestTemplateService {
       log.error("SOMETHING WENT WRONG ERROR: ", e);
       throw new ONDCProductException(ProductException.SOMETHING_WENT_WRONG);
     }
+  }
+
+  public <T, R> T executePostRequestV2(
+      final String url,
+      final Class<T> returnType,
+      final R requestBody,
+      final Map<String, String> headers,
+      MultiValueMap<String, ?> queryParams) throws ONDCProductException {
+     Assert.hasLength(url, "Url can't be null or blank");
+    Assert.notNull(returnType, "Class type cant be null");
+
+    HttpHeaders httpHeaders = new HttpHeaders();
+
+    if (Objects.nonNull(headers)) {
+      headers.forEach(httpHeaders::add);
+    }
+
+    if (queryParams == null) {
+      queryParams = CollectionUtils.toMultiValueMap(Collections.emptyMap());
+    }
+
+    HttpEntity<Object> httpEntity = new HttpEntity<>(requestBody, httpHeaders);
+    T object = null;
+    try {
+      log.info("Url: {} | request: {}", url, httpEntity);
+      object = restTemplate
+          .exchange(url, HttpMethod.POST, httpEntity, returnType, queryParams)
+          .getBody();
+      log.info("Url: {} | result {}", url, object);
+    } catch (Exception e) {
+      log.error("[RestTemplateService.executePostRequest] Exception occurred", e);
+      throw new ONDCProductException(e.getMessage(), "ONDC_1000", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    return object;
   }
 }
