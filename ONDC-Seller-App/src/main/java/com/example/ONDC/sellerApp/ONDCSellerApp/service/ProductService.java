@@ -2,7 +2,9 @@ package com.example.ONDC.sellerApp.ONDCSellerApp.service;
 
 import com.example.ONDC.sellerApp.ONDCSellerApp.db.entity.Product;
 import com.example.ONDC.sellerApp.ONDCSellerApp.db.entity.ProductMetaInfo;
+import com.example.ONDC.sellerApp.ONDCSellerApp.db.entity.Product;
 import com.example.ONDC.sellerApp.ONDCSellerApp.db.repo.master.ProductMasterRepository;
+import com.example.ONDC.sellerApp.ONDCSellerApp.db.repo.slave.ProductSlaveRepository;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.AIService;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.FilterAdultContentResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ProductCategory;
@@ -28,6 +30,7 @@ import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ProductException.IM
 public class ProductService {
   @Autowired private ProductMasterRepository productMasterRepository;
   @Autowired private AIService aiService;
+  @Autowired ProductSlaveRepository productSlaveRepository;
 
   public void addProduct(String title,
                          String description,
@@ -102,5 +105,9 @@ public class ProductService {
             .build();
     product = productMasterRepository.save(product);
     log.info("[saveProductInDb] Product created successfully with id: {} | title: {}", product.getId(), title);
+  }
+
+  public List<Product> getProducts(){
+    return productSlaveRepository.findAll();
   }
 }

@@ -1,14 +1,17 @@
 package com.example.ONDC.sellerApp.ONDCSellerApp.controllers;
 
+import com.example.ONDC.sellerApp.ONDCSellerApp.db.entity.Product;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenericGenerateResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
 import com.example.ONDC.sellerApp.ONDCSellerApp.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,6 +23,7 @@ import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.ProductControll
 @Slf4j
 @RestController
 @RequestMapping(PRODUCT_BASE_URL)
+@RequiredArgsConstructor
 public class ProductController {
 
   @Autowired private ProductService productService;
@@ -39,5 +43,10 @@ public class ProductController {
     productService.addProduct(title, description, category, additionalInfo, createdBy, price, netQuantity, images, imageUrl);
     log.info("[addProduct] Request success | title: {}", title);
     return new GenericGenerateResponse<>(SUCCESS);
+  }
+
+  @GetMapping("/getProducts")
+  public List<Product> getProducts() throws ONDCProductException {
+    return productService.getProducts();
   }
 }
