@@ -8,9 +8,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenerateImageRestApiImageRequest {
-  private String prompt;
-  private String size;
-  @JsonProperty("n")
-  private int numImages;
+public class ChatCompletionUsage {
+
+  @JsonProperty("completion_tokens")
+  private int completionTokens;
+
+  @JsonProperty("prompt_tokens")
+  private int promptTokens;
+
+  @JsonProperty("total_tokens")
+  private int totalTokens;
 }

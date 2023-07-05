@@ -21,7 +21,7 @@ public class EnhanceDescriptionService extends CommonChatCompletionService{
   }
 
   @Override
-  public AIChatCompletionRequest getChatCompletionRequest(String description, int tokenSize) {
+  public AIChatCompletionRequest getChatCompletionRequest(String description, int tokenSize,Integer category) {
     return AIChatCompletionRequest.builder()
       .maxTokens(tokenSize)
       .messages(

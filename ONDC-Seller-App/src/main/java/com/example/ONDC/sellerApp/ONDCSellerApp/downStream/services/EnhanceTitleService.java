@@ -9,7 +9,9 @@ import java.util.Arrays;
 
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.PromtGenerationConstants.SYSTEM_ROLE;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.PromtGenerationConstants.USER_ROLE;
-import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.*;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.ENHANCE_TITLE_SHORT_LEARNING_INPUT;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.ENHANCE_TITLE_SHORT_LEARNING_OUTPUT;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.ENHANCE_TITLE_TONALITY_SETUP;
 
 @Slf4j
 @Service
@@ -21,7 +23,7 @@ public class EnhanceTitleService extends CommonChatCompletionService {
   }
 
   @Override
-  public AIChatCompletionRequest getChatCompletionRequest(String description, int tokenSize) {
+  public AIChatCompletionRequest getChatCompletionRequest(String description, int tokenSize, Integer category) {
     return AIChatCompletionRequest.builder()
         .maxTokens(tokenSize)
         .messages(

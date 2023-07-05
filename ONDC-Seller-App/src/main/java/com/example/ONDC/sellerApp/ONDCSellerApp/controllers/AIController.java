@@ -29,13 +29,14 @@ public class AIController {
   @GetMapping(GENERATE_IMAGE)
   public GenericGenerateResponse<ImageData> generateImage(
     @RequestParam(name = "title") String title,
-    @RequestParam(name = "category") Integer category) throws ONDCProductException {
-    return aiService.generateImage(title, category);
+    @RequestParam(name = "category") Integer category) throws ONDCProductException, InterruptedException {
+    GenericGenerateResponse<ImageData> response = aiService.generateImage(title, category);
+    return response;
   }
 
   @PostMapping(REMOVE_BACKGROUND)
   public Resource generateImage(@RequestPart List<MultipartFile> file) throws ONDCProductException, IOException {
-    return aiService.removeBackGround(file.get(2));
+    return aiService.removeBackGround(file.get(0));
   }
 
   @GetMapping(ENHANCE_TITLE)
@@ -45,21 +46,34 @@ public class AIController {
     GenericGenerateResponse<CommonDescriptionResponse> response =
         chatCompletionServiceFactory
             .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_TITLE)
-            .getChatCompletionRecommendation(title);
+            .getChatCompletionRecommendation(title, null);
     log.info("[enhanceDescription] Response: {}", response);
     return  response;
   }
 
   @GetMapping(ENHANCE_DESCRIPTION)
   public GenericGenerateResponse<CommonDescriptionResponse> enhanceDescription(
-    @RequestParam(name = "title") String title) throws ONDCProductException {
+    @RequestParam(name = "title") String title,
+    @RequestParam(name = "category") Integer category) throws ONDCProductException {
+
     log.info("[enhanceDescription] Request title: {}", title);
     GenericGenerateResponse<CommonDescriptionResponse> response =
       chatCompletionServiceFactory
         .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_DESCRIPTION)
-        .getChatCompletionRecommendation(title);
+        .getChatCompletionRecommendation(title,category);
     log.info("[enhanceDescription] Response: {}", response);
     return  response;
   }
 
+  @GetMapping(GENERATE_DESCRIPTION)
+  public GenericGenerateResponse<CommonDescriptionResponse> generateDescription(
+    @RequestParam(name = "title") String title,
+    @RequestParam(name = "category") Integer category) throws ONDCProductException {
+    GenericGenerateResponse<CommonDescriptionResponse> response =
+      chatCompletionServiceFactory
+        .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.GENERATE_DESCRIPTION)
+        .getChatCompletionRecommendation(title, category);
+    log.info("[generateDescription] Response: {}", response);
+    return response;
+  }
 }
