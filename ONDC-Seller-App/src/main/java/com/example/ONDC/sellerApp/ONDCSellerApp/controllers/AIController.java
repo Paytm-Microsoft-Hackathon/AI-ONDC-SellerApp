@@ -29,7 +29,7 @@ public class AIController {
   @GetMapping(GENERATE_IMAGE)
   public GenericGenerateResponse<ImageData> generateImage(
     @RequestParam(name = "title") String title,
-    @RequestParam(name = "category") Integer category) throws ONDCProductException {
+    @RequestParam(name = "category") Integer category) throws ONDCProductException, InterruptedException {
     return aiService.generateImage(title, category);
   }
 
