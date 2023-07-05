@@ -1,5 +1,7 @@
 package com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services;
 
+import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.AIChatCompletionRequest;
+import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.CommonDescriptionResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenerateImageRestApiImageRequest;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenerateImageRestApiImageResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenericGenerateResponse;
@@ -32,6 +34,7 @@ import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.OPEN_AI_IMAGE_R
 @RequiredArgsConstructor
 public class AIService {
   private final RestTemplateService restTemplateService;
+  private final GenerateDescriptionService generateDescriptionService;
   @Value("${openai.image-generator.api-key}")
   private String apiKey;
   @Value("${openai.image-generator.url}")
@@ -73,4 +76,12 @@ public class AIService {
     responseData.getResult().getData().forEach(imageUrl -> imageUrlList.add(imageUrl.getUrl()));
     return new GenericGenerateResponse<>(new ImageData(imageUrlList));
   }
+
+  public CommonDescriptionResponse generateDescription(String title, Integer category) {
+    AIChatCompletionRequest request = generateDescriptionService.getChatCompletionRequest(title,
+      generateDescriptionService.getMaxTokenSize());
+    log.info("request: {}", request);
+    return new CommonDescriptionResponse(title + category);
+  }
+
 }

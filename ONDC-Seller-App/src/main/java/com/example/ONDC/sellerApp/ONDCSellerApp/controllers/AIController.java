@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.BASE_URL;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.ENHANCE_TITLE;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.GENERATE_DESCRIPTION;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.GENERATE_IMAGE;
 
 @Slf4j
@@ -30,7 +31,8 @@ public class AIController {
   public GenericGenerateResponse<ImageData> generateImage(
     @RequestParam(name = "title") String title,
     @RequestParam(name = "category") Integer category) throws ONDCProductException, InterruptedException {
-    return aiService.generateImage(title, category);
+    GenericGenerateResponse<ImageData> response = aiService.generateImage(title, category);
+    return response;
   }
 
   @GetMapping(ENHANCE_TITLE)
@@ -43,5 +45,13 @@ public class AIController {
             .getChatCompletionRecommendation(title);
     log.info("[enhanceDescription] Response: {}", response);
     return  response;
+  }
+
+  @GetMapping(GENERATE_DESCRIPTION)
+  public GenericGenerateResponse<CommonDescriptionResponse> generateDescription(
+    @RequestParam(name = "title") String title,
+    @RequestParam(name = "category") Integer category) {
+    CommonDescriptionResponse response = aiService.generateDescription(title, category);
+    return new GenericGenerateResponse<>(response);
   }
 }
