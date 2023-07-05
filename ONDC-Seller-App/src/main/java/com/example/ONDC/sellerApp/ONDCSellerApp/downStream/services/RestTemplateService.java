@@ -19,7 +19,7 @@ import java.util.Map;
 public class RestTemplateService {
   private final RestTemplate restTemplate = new RestTemplate();
 
-  public <T> T executePostRequest(final String url, Class<T> clazz, Object requestBody, final Map<String, String> headers, final MultiValueMap<String, String> params)
+  public <T> HttpHeaders executePostRequest(final String url, Class<T> clazz, Object requestBody, final Map<String, String> headers, final MultiValueMap<String, String> params)
     throws ONDCProductException {
     HttpHeaders httpHeaders;
     ResponseEntity<T> responseEntity;
@@ -33,6 +33,26 @@ public class RestTemplateService {
     try {
       log.info("url: {}, entity: {}, class: {}", builder.toUriString(), httpEntity, clazz);
       responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, httpEntity, clazz);
+      return responseEntity.getHeaders();
+    } catch (Exception e) {
+      log.error("SOMETHING WENT WRONG ERROR: ", e);
+      throw new ONDCProductException(ProductException.SOMETHING_WENT_WRONG);
+    }
+  }
+
+  public <T> T executeGetRequest(final String url, Class<T> clazz, final Map<String, String> headers, final MultiValueMap<String, String> params)
+    throws ONDCProductException {
+    HttpHeaders httpHeaders;
+    ResponseEntity<T> responseEntity;
+    httpHeaders = new HttpHeaders();
+    for (Map.Entry<String, String> entry : headers.entrySet()) {
+      httpHeaders.add(entry.getKey(), entry.getValue());
+    }
+    HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
+    try {
+      log.info("url: {}, entity: {}, class: {}", url, httpEntity, clazz);
+      responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, clazz);
+      log.info("responseEntity: {}",responseEntity);
       return responseEntity.getBody();
     } catch (Exception e) {
       log.error("SOMETHING WENT WRONG ERROR: ", e);
