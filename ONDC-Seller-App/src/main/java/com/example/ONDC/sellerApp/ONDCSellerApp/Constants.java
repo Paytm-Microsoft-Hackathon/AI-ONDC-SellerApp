@@ -11,6 +11,7 @@ public class Constants {
   public static final String CONTENT_TYPE = "Content-Type";
   public static final String APPLICATION_JSON = "application/json";
   public static final String GENERATE_DESCRIPTION = "/generate/description";
+  public static final String GENERATE_ADDITIONAL_DESCRIPTION = "/generate/additionalDescription";
 
   public static class ProductControllerConstants {
     public static final String PRODUCT_BASE_URL = "/api/v1/product";
