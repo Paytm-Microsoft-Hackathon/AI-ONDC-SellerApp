@@ -1,7 +1,7 @@
 package com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services;
 
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.AIChatCompletionRequest;
-import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.CommonDescriptionResponse;
+import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.ChatCompletionResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenerateImageRestApiImageRequest;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenerateImageRestApiImageResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenericGenerateResponse;
@@ -27,14 +27,17 @@ import java.util.Objects;
 
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.API_KEY;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.API_VERSION;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.APPLICATION_JSON;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.CHAT_COMPLETION_API_VERSION;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.CONTENT_TYPE;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.OPEN_AI_IMAGE_REDIRECTION_URL;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.AzureEndpoints.CHAT_COMPLETION;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AIService {
   private final RestTemplateService restTemplateService;
-  private final GenerateDescriptionService generateDescriptionService;
   @Value("${openai.image-generator.api-key}")
   private String apiKey;
   @Value("${openai.image-generator.url}")
@@ -77,11 +80,15 @@ public class AIService {
     return new GenericGenerateResponse<>(new ImageData(imageUrlList));
   }
 
-  public CommonDescriptionResponse generateDescription(String title, Integer category) {
-    AIChatCompletionRequest request = generateDescriptionService.getChatCompletionRequest(title,
-      generateDescriptionService.getMaxTokenSize());
-    log.info("request: {}", request);
-    return new CommonDescriptionResponse(title + category);
+  public ChatCompletionResponse chatCompletionAI(AIChatCompletionRequest request) throws ONDCProductException {
+    Map<String, String> headers = new HashMap<>();
+    headers.put(API_KEY, apiKey);
+    headers.put(CONTENT_TYPE, APPLICATION_JSON);
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.put(API_VERSION, Collections.singletonList(CHAT_COMPLETION_API_VERSION));
+    return
+        restTemplateService.executePostRequestV3(
+            CHAT_COMPLETION.getValue(), ChatCompletionResponse.class, request, headers, params);
   }
 
 }

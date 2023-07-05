@@ -9,9 +9,9 @@ import java.util.Arrays;
 
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.PromtGenerationConstants.SYSTEM_ROLE;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.PromtGenerationConstants.USER_ROLE;
-import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.GenerateDescriptionPrompt.GENERATE_DESCRIPTION_SHORT_LEARNING_INPUT;
-import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.GenerateDescriptionPrompt.GENERATE_DESCRIPTION_SHORT_LEARNING_OUTPUT;
-import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.GenerateDescriptionPrompt.GENERATE_DESCRIPTION_TONALITY_SETUP;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.GENERATE_DESCRIPTION_SHORT_LEARNING_INPUT;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.GENERATE_DESCRIPTION_SHORT_LEARNING_OUTPUT;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionPrompts.GENERATE_DESCRIPTION_TONALITY_SETUP;
 
 @Slf4j
 @Service
@@ -22,7 +22,7 @@ public class GenerateDescriptionService extends CommonChatCompletionService {
   }
 
   @Override
-  public AIChatCompletionRequest getChatCompletionRequest(String description, int tokenSize) {
+  public AIChatCompletionRequest getChatCompletionRequest(String description, int tokenSize, Integer category) {
     return AIChatCompletionRequest.builder()
       .maxTokens(tokenSize)
       .messages(

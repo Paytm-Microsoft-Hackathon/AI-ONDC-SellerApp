@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class ChatCompletionServiceFactory {
 
   @Autowired private EnhanceTitleService enhanceTitleService;
+  @Autowired private GenerateDescriptionService generateDescriptionService;
 
   public CommonChatCompletionService getChatCompletionServiceBasedOnFlowtype(
       ChatCompletionRequestFlowtype flowtype) {
@@ -17,6 +18,7 @@ public class ChatCompletionServiceFactory {
       case ENHANCE_TITLE :
         return enhanceTitleService;
       case GENERATE_DESCRIPTION :
+        return generateDescriptionService;
       case GENERATE_ADDITIONAL_DESCRIPTION :
       case ENHANCE_DESCRIPTION :
       default:

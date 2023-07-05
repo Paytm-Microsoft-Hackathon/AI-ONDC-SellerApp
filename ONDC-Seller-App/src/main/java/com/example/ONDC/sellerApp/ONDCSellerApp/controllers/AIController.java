@@ -36,13 +36,13 @@ public class AIController {
   }
 
   @GetMapping(ENHANCE_TITLE)
-  public GenericGenerateResponse<CommonDescriptionResponse> enhanceDescription(
+  public GenericGenerateResponse<CommonDescriptionResponse> enhanceTitle(
       @RequestParam(name = "title") String title) throws ONDCProductException {
     log.info("[enhanceDescription] Request title: {}", title);
     GenericGenerateResponse<CommonDescriptionResponse> response =
         chatCompletionServiceFactory
             .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_TITLE)
-            .getChatCompletionRecommendation(title);
+            .getChatCompletionRecommendation(title, null);
     log.info("[enhanceDescription] Response: {}", response);
     return  response;
   }
@@ -50,8 +50,12 @@ public class AIController {
   @GetMapping(GENERATE_DESCRIPTION)
   public GenericGenerateResponse<CommonDescriptionResponse> generateDescription(
     @RequestParam(name = "title") String title,
-    @RequestParam(name = "category") Integer category) {
-    CommonDescriptionResponse response = aiService.generateDescription(title, category);
-    return new GenericGenerateResponse<>(response);
+    @RequestParam(name = "category") Integer category) throws ONDCProductException {
+    GenericGenerateResponse<CommonDescriptionResponse> response =
+      chatCompletionServiceFactory
+        .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.GENERATE_DESCRIPTION)
+        .getChatCompletionRecommendation(title, category);
+    log.info("[generateDescription] Response: {}", response);
+    return response;
   }
 }

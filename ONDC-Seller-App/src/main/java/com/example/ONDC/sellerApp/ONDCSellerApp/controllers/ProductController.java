@@ -1,7 +1,5 @@
 package com.example.ONDC.sellerApp.ONDCSellerApp.controllers;
 
-import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenericGenerateResponse;
-import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.ImageData;
 import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
