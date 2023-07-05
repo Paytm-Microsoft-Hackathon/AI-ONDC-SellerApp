@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 public class GenerateImageRestApiImageRequest {
   private String prompt;
   private String size;
-  @JsonProperty("num_images")
+  @JsonProperty("n")
   private int numImages;
 }

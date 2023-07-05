@@ -44,7 +44,6 @@ public class RestTemplateService {
   public <T> T executeGetRequest(final String url, Class<T> clazz, final Map<String, String> headers, final MultiValueMap<String, String> params)
     throws ONDCProductException {
     HttpHeaders httpHeaders;
-//    ResponseEntity<T> responseEntity;
     httpHeaders = new HttpHeaders();
     for (Map.Entry<String, String> entry : headers.entrySet()) {
       httpHeaders.add(entry.getKey(), entry.getValue());
@@ -55,7 +54,6 @@ public class RestTemplateService {
     try {
       log.info("url: {}, entity: {}, class: {}", url, httpEntity, clazz);
       ResponseEntity<Object> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity,Object.class);
-      log.info("responseEntity: {}",responseEntity);
       ObjectMapper objectMapper = new ObjectMapper();
       return objectMapper.convertValue(responseEntity.getBody(),clazz);
     } catch (Exception e) {
