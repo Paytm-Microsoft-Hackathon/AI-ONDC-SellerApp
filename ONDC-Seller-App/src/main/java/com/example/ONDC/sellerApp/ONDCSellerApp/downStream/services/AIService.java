@@ -5,6 +5,7 @@ import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.Gener
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenericGenerateResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GetHeadersResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.ImageData;
+import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ImageGenerationPrompt;
 import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ProductCategory;
 import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
 import lombok.RequiredArgsConstructor;
@@ -43,24 +44,31 @@ public class AIService {
   private String apiVersion;
 
   public GenericGenerateResponse<ImageData> generateImage(String title, Integer category) throws ONDCProductException, InterruptedException {
-    String prompt = Objects.nonNull(ProductCategory.fromValue(category))
-      ? title + ProductCategory.fromValue(category).getName() : title;
+    ProductCategory productCategory = ProductCategory.fromValue(category);
+    String prompt = Objects.nonNull(productCategory)
+      ? ImageGenerationPrompt.fromCategory(productCategory)
+      .getPromptMessage().replace("%s", title) : title;
+
     GenerateImageRestApiImageRequest request =
       new GenerateImageRestApiImageRequest(prompt, imageSize, imageNum);
     Map<String, String> headers = new HashMap<>();
     headers.put(API_KEY, apiKey);
+
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.put(API_VERSION, Collections.singletonList(apiVersion));
     HttpHeaders imageHeaders =
       restTemplateService.executePostRequest(imageUrl, GetHeadersResponse.class, request, headers, params);
+
     String openAIImageURL = Objects.requireNonNull(imageHeaders.get(OPEN_AI_IMAGE_REDIRECTION_URL)).toString();
     String url = openAIImageURL.substring(1, openAIImageURL.length() - 1);
     Thread.sleep(5000);
+
     GenerateImageRestApiImageResponse responseData =
       restTemplateService.executeGetRequest(
         url,
         GenerateImageRestApiImageResponse.class,
         headers, params);
+
     List<String> imageUrlList = new ArrayList<>();
     responseData.getResult().getData().forEach(imageUrl -> imageUrlList.add(imageUrl.getUrl()));
     return new GenericGenerateResponse<>(new ImageData(imageUrlList));
