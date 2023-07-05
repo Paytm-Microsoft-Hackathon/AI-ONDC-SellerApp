@@ -21,9 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.ONDC.sellerApp.ONDCSellerApp.constants.API_KEY;
-import static com.example.ONDC.sellerApp.ONDCSellerApp.constants.API_VERSION;
-import static com.example.ONDC.sellerApp.ONDCSellerApp.constants.OPEN_AI_IMAGE_REDIRECTION_URL;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.API_KEY;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.API_VERSION;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.OPEN_AI_IMAGE_REDIRECTION_URL;
 
 @Slf4j
 @Service
