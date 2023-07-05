@@ -10,6 +10,7 @@ import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -63,14 +64,11 @@ public class AIService {
     return new GenericGenerateResponse<>(new ImageData(imageUrlList));
   }
 
-  public MultipartFile removeBackGround(MultipartFile file) throws ONDCProductException, IOException {
+  public Resource removeBackGround(MultipartFile file) throws ONDCProductException, IOException {
     Map<String, String> headers = new HashMap<>();
     headers.put(X_API_KEY, "c5f5c317297de2f9d78c3addb7d157f9982b82291dfa761a9fb597d4ee6a5e52b67f6f923ad8813e9acff9a1998694ae");
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    //params.put(API_VERSION, Collections.singletonList("c5f5c317297de2f9d78c3addb7d157f9982b82291dfa761a9fb597d4ee6a5e52b67f6f923ad8813e9acff9a1998694ae"));
-    MultipartFile response =
-      restTemplateService.executePostRequestWithImage("https://clipdrop-api.co/remove-background/v1", MultipartFile.class, file, headers, params);
-    return  response;
+    return restTemplateService.executePostRequestWithImage("https://clipdrop-api.co/remove-background/v1", MultipartFile.class, file, headers, params);
   }
 
 }

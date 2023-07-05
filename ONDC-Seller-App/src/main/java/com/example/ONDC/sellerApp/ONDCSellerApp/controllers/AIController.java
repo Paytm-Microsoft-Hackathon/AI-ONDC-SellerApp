@@ -9,10 +9,12 @@ import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionRequestFlowt
 import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.*;
 
@@ -32,8 +34,8 @@ public class AIController {
   }
 
   @PostMapping(REMOVE_BACKGROUND)
-  public MultipartFile generateImage(@RequestPart MultipartFile file) throws ONDCProductException, IOException {
-    return aiService.removeBackGround(file);
+  public Resource generateImage(@RequestPart List<MultipartFile> file) throws ONDCProductException, IOException {
+    return aiService.removeBackGround(file.get(2));
   }
 
   @GetMapping(ENHANCE_TITLE)
@@ -47,4 +49,17 @@ public class AIController {
     log.info("[enhanceDescription] Response: {}", response);
     return  response;
   }
+
+  @GetMapping(ENHANCE_DESCRIPTION)
+  public GenericGenerateResponse<CommonDescriptionResponse> enhanceDescription(
+    @RequestParam(name = "title") String title) throws ONDCProductException {
+    log.info("[enhanceDescription] Request title: {}", title);
+    GenericGenerateResponse<CommonDescriptionResponse> response =
+      chatCompletionServiceFactory
+        .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_DESCRIPTION)
+        .getChatCompletionRecommendation(title);
+    log.info("[enhanceDescription] Response: {}", response);
+    return  response;
+  }
+
 }

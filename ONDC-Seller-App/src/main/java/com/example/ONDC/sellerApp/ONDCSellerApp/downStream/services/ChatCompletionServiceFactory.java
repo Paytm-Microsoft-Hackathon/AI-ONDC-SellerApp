@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 public class ChatCompletionServiceFactory {
 
   @Autowired private EnhanceTitleService enhanceTitleService;
+  @Autowired private EnhanceDescriptionService enhanceDescriptionService;
+
 
   public CommonChatCompletionService getChatCompletionServiceBasedOnFlowtype(
       ChatCompletionRequestFlowtype flowtype) {

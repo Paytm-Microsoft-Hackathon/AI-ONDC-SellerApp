@@ -9,6 +9,7 @@ public class Constants {
   public static final String X_API_KEY = "x-api-key";
   public static final String API_VERSION = "api-version";
   public static final String ENHANCE_TITLE = "/enhance/title";
+  public static final String ENHANCE_DESCRIPTION = "/enhance/description";
 
   public static class ProductControllerConstants {
     public static final String PRODUCT_BASE_URL = "/api/v1/product";
