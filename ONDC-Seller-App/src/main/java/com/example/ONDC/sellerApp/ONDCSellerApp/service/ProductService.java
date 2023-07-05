@@ -1,5 +1,6 @@
 package com.example.ONDC.sellerApp.ONDCSellerApp.service;
 
+import com.example.ONDC.sellerApp.ONDCSellerApp.db.entity.Product;
 import com.example.ONDC.sellerApp.ONDCSellerApp.db.repo.master.ProductMasterRepository;
 import com.example.ONDC.sellerApp.ONDCSellerApp.db.repo.slave.ProductSlaveRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +30,15 @@ public class ProductService {
                          List<MultipartFile> images,
                          List<String> imageUrl) {
 
-    convertImageUrlToIn
+//    convertImageUrlToIn
     // convert image url to inputstream
     if (!CollectionUtils.isEmpty(imageUrl)) {
 
     }
 
+  }
+
+  public List<Product> getProducts(){
+    return productSlaveRepository.findAll();
   }
 }

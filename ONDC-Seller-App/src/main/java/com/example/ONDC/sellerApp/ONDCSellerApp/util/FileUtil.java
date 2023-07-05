@@ -7,5 +7,4 @@ import java.io.FileInputStream;
 @Slf4j
 public class FileUtil {
 
-  private FileInputStream
 }
