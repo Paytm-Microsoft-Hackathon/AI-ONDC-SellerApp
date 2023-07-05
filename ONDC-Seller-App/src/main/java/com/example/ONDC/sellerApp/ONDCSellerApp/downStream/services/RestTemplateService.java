@@ -2,6 +2,7 @@ package com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services;
 
 import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ProductException;
 import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -43,17 +44,18 @@ public class RestTemplateService {
   public <T> T executeGetRequest(final String url, Class<T> clazz, final Map<String, String> headers, final MultiValueMap<String, String> params)
     throws ONDCProductException {
     HttpHeaders httpHeaders;
-    ResponseEntity<T> responseEntity;
     httpHeaders = new HttpHeaders();
     for (Map.Entry<String, String> entry : headers.entrySet()) {
       httpHeaders.add(entry.getKey(), entry.getValue());
+      httpHeaders.add(HttpHeaders.CONTENT_TYPE,"application/json");
     }
     HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
+
     try {
       log.info("url: {}, entity: {}, class: {}", url, httpEntity, clazz);
-      responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, clazz);
-      log.info("responseEntity: {}",responseEntity);
-      return responseEntity.getBody();
+      ResponseEntity<Object> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity,Object.class);
+      ObjectMapper objectMapper = new ObjectMapper();
+      return objectMapper.convertValue(responseEntity.getBody(),clazz);
     } catch (Exception e) {
       log.error("SOMETHING WENT WRONG ERROR: ", e);
       throw new ONDCProductException(ProductException.SOMETHING_WENT_WRONG);
