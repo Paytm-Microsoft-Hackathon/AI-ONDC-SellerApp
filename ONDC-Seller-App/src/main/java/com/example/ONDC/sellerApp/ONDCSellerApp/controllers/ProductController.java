@@ -1,8 +1,8 @@
 package com.example.ONDC.sellerApp.ONDCSellerApp.controllers;
 
-import com.example.ONDC.sellerApp.ONDCSellerApp.db.entity.Product;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenericGenerateResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
+import com.example.ONDC.sellerApp.ONDCSellerApp.model.FetchProductResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,8 +45,9 @@ public class ProductController {
     return new GenericGenerateResponse<>(SUCCESS);
   }
 
-  @GetMapping("/getProducts")
-  public List<Product> getProducts() throws ONDCProductException {
-    return productService.getProducts();
+  @GetMapping
+  public List<FetchProductResponse> getProducts(@RequestParam(name = "offset", defaultValue = "0") int offset,
+                                                @RequestParam(name = "limit", defaultValue = "10") int limit)  {
+    return productService.getProducts(offset, limit);
   }
 }

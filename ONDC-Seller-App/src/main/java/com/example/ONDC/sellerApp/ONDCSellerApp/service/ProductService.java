@@ -9,16 +9,22 @@ import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.AIService;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.FilterAdultContentResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ProductCategory;
 import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
+import com.example.ONDC.sellerApp.ONDCSellerApp.model.FetchProductResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.util.FileUtil;
+import com.example.ONDC.sellerApp.ONDCSellerApp.util.OffsetBasedPageRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -107,7 +113,25 @@ public class ProductService {
     log.info("[saveProductInDb] Product created successfully with id: {} | title: {}", product.getId(), title);
   }
 
-  public List<Product> getProducts(){
-    return productSlaveRepository.findAll();
+  public List<FetchProductResponse> getProducts(int offset, int limit) {
+    Page<Product> productInPages = productSlaveRepository.findAll(new OffsetBasedPageRequest(
+        offset,
+        limit,
+        Sort.by(new Sort.Order(Sort.Direction.DESC, "id"))));
+    List<Product> products = productInPages.getContent();
+    List<FetchProductResponse> response = new ArrayList<>();
+    products.forEach(product -> {
+      response.add(FetchProductResponse
+          .builder()
+          .title(product.getTitle())
+          .description(product.getDescription())
+          .productCategory(product.getProductCategory().getValue())
+          .createdBy(product.getCreatedBy())
+          .price(product.getPrice())
+          .netQuantity(product.getNetQuantity())
+          .imageUrls(Objects.nonNull(product.getMetaInfo()) ? product.getMetaInfo().getImagesPath() : new ArrayList<>())
+          .build());
+    });
+    return response;
   }
 }
