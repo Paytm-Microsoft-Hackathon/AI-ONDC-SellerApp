@@ -8,6 +8,8 @@ public class OndcSellerAppApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OndcSellerAppApplication.class, args);
+		System.setProperty("javax.net.ssl.trustStore", "C:/.keystore");
+		System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 	}
 
 }

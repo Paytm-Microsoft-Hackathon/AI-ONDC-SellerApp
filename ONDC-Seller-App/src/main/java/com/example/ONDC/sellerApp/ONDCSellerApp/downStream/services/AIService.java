@@ -14,16 +14,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.ONDC.sellerApp.ONDCSellerApp.constants.API_KEY;
-import static com.example.ONDC.sellerApp.ONDCSellerApp.constants.API_VERSION;
-import static com.example.ONDC.sellerApp.ONDCSellerApp.constants.OPEN_AI_IMAGE_REDIRECTION_URL;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.constants.*;
 
 @Slf4j
 @Service
@@ -62,4 +62,15 @@ public class AIService {
     responseData.getResult().getData().forEach(imageUrl -> imageUrlList.add(imageUrl.getUrl()));
     return new GenericGenerateResponse<>(new ImageData(imageUrlList));
   }
+
+  public MultipartFile removeBackGround(MultipartFile file) throws ONDCProductException, IOException {
+    Map<String, String> headers = new HashMap<>();
+    headers.put(X_API_KEY, "c5f5c317297de2f9d78c3addb7d157f9982b82291dfa761a9fb597d4ee6a5e52b67f6f923ad8813e9acff9a1998694ae");
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    //params.put(API_VERSION, Collections.singletonList("c5f5c317297de2f9d78c3addb7d157f9982b82291dfa761a9fb597d4ee6a5e52b67f6f923ad8813e9acff9a1998694ae"));
+    MultipartFile response =
+      restTemplateService.executePostRequestWithImage("https://clipdrop-api.co/remove-background/v1", MultipartFile.class, file, headers, params);
+    return  response;
+  }
+
 }

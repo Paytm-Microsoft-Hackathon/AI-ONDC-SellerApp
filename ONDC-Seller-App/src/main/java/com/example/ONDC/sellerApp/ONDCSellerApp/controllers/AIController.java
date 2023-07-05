@@ -6,13 +6,12 @@ import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.Image
 import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import static com.example.ONDC.sellerApp.ONDCSellerApp.constants.BASE_URL;
-import static com.example.ONDC.sellerApp.ONDCSellerApp.constants.GENERATE_IMAGE;
+import java.io.IOException;
+
+import static com.example.ONDC.sellerApp.ONDCSellerApp.constants.*;
 
 @Slf4j
 @RestController
@@ -25,6 +24,12 @@ public class AIController {
     @RequestParam(name = "title") String title,
     @RequestParam(name = "category") Integer category) throws ONDCProductException {
     return aiService.generateImage(title, category);
+  }
+
+
+  @PostMapping(REMOVE_BACK_GROUND)
+  public MultipartFile generateImage(@RequestPart MultipartFile file) throws ONDCProductException, IOException {
+    return aiService.removeBackGround(file);
   }
 
 }
