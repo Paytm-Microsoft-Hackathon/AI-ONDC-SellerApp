@@ -2,6 +2,8 @@ package com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services;
 
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.AIChatCompletionRequest;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.AIShortLearningDTO;
+import com.example.ONDC.sellerApp.ONDCSellerApp.enums.EnhanceDescriptionSetToneInPrompt;
+import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ProductCategory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,7 @@ public class EnhanceDescriptionService extends CommonChatCompletionService{
       .maxTokens(tokenSize)
       .messages(
         Arrays.asList(
-          AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(ENHANCE_DESCRIPTION_TONALITY_SETUP.getValue()).build(),
+          AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(EnhanceDescriptionSetToneInPrompt.fromCategory(ProductCategory.fromValue(category)).getpromptMessage()).build(),
           AIShortLearningDTO.builder().role(USER_ROLE).content(ENHANCE_DESCRIPTION_SHORT_LEARNING_INPUT.getValue()).build(),
           AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(ENHANCE_DESCRIPTION_SHORT_LEARNING_OUTPUT.getValue()).build(),
           AIShortLearningDTO.builder().role(USER_ROLE).content(description).build()
