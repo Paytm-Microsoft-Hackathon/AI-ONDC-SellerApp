@@ -21,6 +21,8 @@ public class Constants {
   public static final String FILTER_ADULT_CONTENT_KEY = "883d0b6426834e5998a9be11041247a2";
   public static final String TITLE = "{title}";
   public static final String CATEGORY = "{category}";
+  public static final String RATE_LIMITING_COUNT_KEY = "count";
+  public static final String RATE_LIMITING_TIME_KEY = "time";
 
   public static class ProductControllerConstants {
     public static final String PRODUCT_BASE_URL = "/api/v1/product";

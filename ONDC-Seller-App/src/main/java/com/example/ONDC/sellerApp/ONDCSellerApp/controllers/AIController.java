@@ -23,6 +23,7 @@ import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.ENHANCE_TITLE;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.GENERATE_ADDITIONAL_DESCRIPTION;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.GENERATE_DESCRIPTION;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.GENERATE_IMAGE;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ProductException.API_ATTEMPT_EXCEEDED;
 
 @Slf4j
 @RestController
@@ -37,13 +38,24 @@ public class AIController {
   public GenericGenerateResponse<ImageData> generateImage(
     @RequestParam(name = "title") String title,
     @RequestParam(name = "category") Integer category) throws ONDCProductException, InterruptedException {
+    if(rateLimitingService.checkForRateLimit(GENERATE_IMAGE)) {
+      log.warn("[GENERATE_IMAGE] Limit the api due to multiple attempts");
+      throw new ONDCProductException(API_ATTEMPT_EXCEEDED);
+    }
     GenericGenerateResponse<ImageData> response = aiService.generateImage(title, category);
+    rateLimitingService.increaseCount(GENERATE_IMAGE);
     return response;
   }
 
   @PostMapping(REMOVE_BACKGROUND)
   public Resource generateImage(@RequestPart List<MultipartFile> file) throws ONDCProductException, IOException {
-    return aiService.removeBackGround(file.get(0));
+    if(rateLimitingService.checkForRateLimit(GENERATE_IMAGE)) {
+      log.warn("[GENERATE_DESCRIPTION] Limit the api due to multiple attempts");
+      throw new ONDCProductException(API_ATTEMPT_EXCEEDED);
+    }
+    Resource response = aiService.removeBackGround(file.get(0));
+    rateLimitingService.increaseCount(GENERATE_IMAGE);
+    return response;
   }
 
   @GetMapping(ENHANCE_TITLE)
@@ -51,11 +63,16 @@ public class AIController {
       @RequestParam(name = "title") String title,
       @RequestParam(name = "category") Integer category) throws ONDCProductException {
     log.info("[enhanceDescription] Request title: {}", title);
+    if(rateLimitingService.checkForRateLimit(ENHANCE_TITLE)) {
+      log.warn("[ENHANCE_TITLE] Limit the api due to multiple attempts");
+      throw new ONDCProductException(API_ATTEMPT_EXCEEDED);
+    }
     GenericGenerateResponse<CommonDescriptionResponse> response =
         chatCompletionServiceFactory
             .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_TITLE)
             .getChatCompletionRecommendation(null, category, title);
     log.info("[enhanceDescription] Response: {}", response);
+    rateLimitingService.increaseCount(ENHANCE_TITLE);
     return  response;
   }
 
@@ -64,13 +81,17 @@ public class AIController {
     @RequestParam(name = "title") String title,
     @RequestParam(name = "category") Integer category,
     @RequestParam(name = "description") String description) throws ONDCProductException {
-
     log.info("[enhanceDescription] Request title: {},category :{}, description :{}", title,category,description);
+    if(rateLimitingService.checkForRateLimit(ENHANCE_DESCRIPTION)) {
+      log.warn("[ENHANCE_DESCRIPTION] Limit the api due to multiple attempts");
+      throw new ONDCProductException(API_ATTEMPT_EXCEEDED);
+    }
     GenericGenerateResponse<CommonDescriptionResponse> response =
       chatCompletionServiceFactory
         .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_DESCRIPTION)
         .getChatCompletionRecommendation(description, category, title);
     log.info("[enhanceDescription] Response: {}", response);
+    rateLimitingService.increaseCount(ENHANCE_DESCRIPTION);
     return  response;
   }
 
@@ -78,14 +99,16 @@ public class AIController {
   public GenericGenerateResponse<CommonDescriptionResponse> generateDescription(
     @RequestParam(name = "title") String title,
     @RequestParam(name = "category") Integer category) throws ONDCProductException {
-    if(rateLimitingService.limitRate())
-      return null;
+    if(rateLimitingService.checkForRateLimit(GENERATE_DESCRIPTION)) {
+      log.warn("[GENERATE_DESCRIPTION] Limit the api due to multiple attempts");
+      throw new ONDCProductException(API_ATTEMPT_EXCEEDED);
+    }
     GenericGenerateResponse<CommonDescriptionResponse> response =
       chatCompletionServiceFactory
         .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.GENERATE_DESCRIPTION)
         .getChatCompletionRecommendation(null, category, title);
-    rateLimitingService.increaseCount("generateDescription");
     log.info("[generateDescription] Response: {}", response);
+    rateLimitingService.increaseCount(GENERATE_DESCRIPTION);
     return response;
   }
 
@@ -93,11 +116,16 @@ public class AIController {
   public GenericGenerateResponse<CommonDescriptionResponse> generateAdditionalDescription(
     @RequestParam(name = "title") String title,
     @RequestParam(name = "category") Integer category) throws ONDCProductException {
+    if(rateLimitingService.checkForRateLimit(GENERATE_ADDITIONAL_DESCRIPTION)) {
+      log.warn("[GENERATE_ADDITIONAL_DESCRIPTION] Limit the api due to multiple attempts");
+      throw new ONDCProductException(API_ATTEMPT_EXCEEDED);
+    }
     GenericGenerateResponse<CommonDescriptionResponse> response =
       chatCompletionServiceFactory
         .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.GENERATE_ADDITIONAL_DESCRIPTION)
         .getChatCompletionRecommendation(null, category, title);
     log.info("[generateAdditionalDescription] Response: {}", response);
+    rateLimitingService.increaseCount(GENERATE_ADDITIONAL_DESCRIPTION);
     return response;
   }
 }
