@@ -46,12 +46,13 @@ public class AIController {
 
   @GetMapping(ENHANCE_TITLE)
   public GenericGenerateResponse<CommonDescriptionResponse> enhanceTitle(
-      @RequestParam(name = "title") String title) throws ONDCProductException {
+      @RequestParam(name = "title") String title,
+      @RequestParam(name = "category") Integer category) throws ONDCProductException {
     log.info("[enhanceDescription] Request title: {}", title);
     GenericGenerateResponse<CommonDescriptionResponse> response =
         chatCompletionServiceFactory
             .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_TITLE)
-            .getChatCompletionRecommendation(title, null);
+            .getChatCompletionRecommendation(title, category);
     log.info("[enhanceDescription] Response: {}", response);
     return  response;
   }

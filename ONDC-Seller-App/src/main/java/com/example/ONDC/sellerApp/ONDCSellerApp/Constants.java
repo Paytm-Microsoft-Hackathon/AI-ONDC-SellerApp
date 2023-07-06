@@ -28,5 +28,6 @@ public class Constants {
   public static class PromtGenerationConstants {
     public static final String USER_ROLE = "user";
     public static final String SYSTEM_ROLE = "system";
+    public static final String OTHER_PRODUCT_CATEGORY = "One specific";
   }
 }
