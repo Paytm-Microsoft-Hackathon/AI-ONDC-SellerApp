@@ -20,6 +20,7 @@ public class ONDCProductException extends Exception {
     super(productException.getMessage());
     this.status = productException.getStatus();
     this.code = productException.getCode();
+    this.message = productException.getMessage();
   }
 
   public ONDCProductException(final String message) {
