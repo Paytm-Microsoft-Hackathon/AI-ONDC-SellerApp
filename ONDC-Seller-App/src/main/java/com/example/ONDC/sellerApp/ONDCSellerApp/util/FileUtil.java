@@ -23,7 +23,7 @@ public class FileUtil {
 
   public static String saveFileLocallyFromURL(String url, String title) throws ONDCProductException {
     try {
-      InputStream inputStream = new URL("http://www.somewebsite.com/a.txt").openStream();
+      InputStream inputStream = new URL(url).openStream();
       return saveFile(inputStream, title);
     } catch (ONDCProductException ex) {
       throw ex;

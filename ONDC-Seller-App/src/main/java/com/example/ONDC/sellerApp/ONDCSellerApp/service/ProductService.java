@@ -9,6 +9,7 @@ import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.AIService;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.FilterAdultContentResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ProductCategory;
 import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
+import com.example.ONDC.sellerApp.ONDCSellerApp.model.AddProductRequest;
 import com.example.ONDC.sellerApp.ONDCSellerApp.model.FetchProductResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.util.FileUtil;
 import com.example.ONDC.sellerApp.ONDCSellerApp.util.OffsetBasedPageRequest;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -29,6 +31,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ProductException.IMAGE_CONTAINS_ADULT_CONTENT;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.ProductException.MANDATORY_PARAMETERS_MISSING_IN_REQUEST;
 
 @Slf4j
 @Service
@@ -53,19 +56,44 @@ public class ProductService {
     saveProductInDb(title, description, category, additionalInfo, createdBy, price, netQuantity, imageFilePath);
   }
 
+  public void addProductV2(AddProductRequest request,
+                           List<MultipartFile> images) throws ONDCProductException, IOException {
+
+    validateAddProductRequest(request);
+    List<String> imageFilePath = saveAndGenerateLocalFilePath(images, request.getImageUrl(), request.getTitle());
+    checkForAdultContent(imageFilePath);
+    saveProductInDb(request.getTitle(), request.getDescription(), request.getCategory(), request.getAdditionalInfo(),
+        request.getCreatedBy(), request.getPrice(), request.getNetQuantity(), imageFilePath);
+  }
+
+  private void validateAddProductRequest(AddProductRequest request) throws ONDCProductException {
+    if (StringUtils.isEmpty(request.getTitle())
+        || StringUtils.isEmpty(request.getCategory())
+        || StringUtils.isEmpty(request.getCreatedBy())
+        || StringUtils.isEmpty(request.getPrice())
+        || StringUtils.isEmpty(request.getDescription())) {
+      log.warn("[validateAddProductRequest] Mandatory parameter missing in request | request: {}", request);
+      throw new ONDCProductException(MANDATORY_PARAMETERS_MISSING_IN_REQUEST);
+    }
+  }
+
   private List<String> saveAndGenerateLocalFilePath(List<MultipartFile> images,
                                        List<String> imageUrl,
                                        String title) throws IOException, ONDCProductException {
     List<String> filePath = new ArrayList<>();
 
     // Save seller uploaded image
-    for (var image : images) {
-      filePath.add(FileUtil.saveFile(image.getInputStream(), title));
+    if (!CollectionUtils.isEmpty(images)) {
+      for (var image : images) {
+        filePath.add(FileUtil.saveFile(image.getInputStream(), title));
+      }
     }
 
     // Save AI generate image
-    for (var image : imageUrl) {
-      filePath.add(FileUtil.saveFileLocallyFromURL(image, title));
+    if (!CollectionUtils.isEmpty(imageUrl)) {
+      for (var image : imageUrl) {
+        filePath.add(FileUtil.saveFileLocallyFromURL(image, title));
+      }
     }
 
     return filePath;
@@ -76,14 +104,14 @@ public class ProductService {
     for (var image : imageFilePath) {
       FilterAdultContentResponse response = aiService.filterAdultContent(image);
       if (Objects.nonNull(response)
-          && Objects.nonNull(response.getAdultContentDetails())
-          && Boolean.TRUE.equals(response.getAdultContentDetails().getIsAdultContent())) {
+          && Objects.nonNull(response.getAdult())
+          && Boolean.TRUE.equals(response.getAdult().getIsAdultContent())) {
         counter++;
       }
     }
 
     if (counter > 0) {
-      log.warn("[checkForAdultContent] {} image containes adult content", counter);
+      log.warn("[checkForAdultContent] {} image contains adult content", counter);
       throw new ONDCProductException(String.format(IMAGE_CONTAINS_ADULT_CONTENT.getMessage(), counter),
           IMAGE_CONTAINS_ADULT_CONTENT.getCode(), HttpStatus.BAD_REQUEST);
     }

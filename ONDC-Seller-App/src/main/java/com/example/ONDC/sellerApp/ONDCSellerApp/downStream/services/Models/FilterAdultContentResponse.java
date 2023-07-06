@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FilterAdultContentResponse {
-  private FilterAdultContentResponseDetails adultContentDetails;
+  private FilterAdultContentResponseDetails adult;
   private String requestId;
   private FilterAdultContentResponseMetaData metadata;
   private String modelVersion;
