@@ -34,7 +34,7 @@ public class GenerateDescriptionService extends CommonChatCompletionService {
   public AIChatCompletionRequest getChatCompletionRequest(String description, int tokenSize, Integer category,String title) {
     return AIChatCompletionRequest.builder()
       .maxTokens(tokenSize)
-      .messages(getMessageList(description, category))
+      .messages(getMessageList(title, category))
       .build();
   }
 
