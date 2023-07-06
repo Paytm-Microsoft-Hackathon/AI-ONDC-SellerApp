@@ -19,6 +19,8 @@ public class Constants {
   public static final String CHECK_ADULT = "Adult";
   public static final String FILTER_ADULT_CONTENT_KEY_HEADER = "Ocp-Apim-Subscription-Key";
   public static final String FILTER_ADULT_CONTENT_KEY = "883d0b6426834e5998a9be11041247a2";
+  public static final String TITLE = "{title}";
+  public static final String CATEGORY = "{category}";
 
   public static class ProductControllerConstants {
     public static final String PRODUCT_BASE_URL = "/api/v1/product";
