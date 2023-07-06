@@ -7,6 +7,7 @@ import com.example.ONDC.sellerApp.AIProductCataloging.downStream.services.Models
 import com.example.ONDC.sellerApp.AIProductCataloging.downStream.services.Models.ImageData;
 import com.example.ONDC.sellerApp.AIProductCataloging.enums.ChatCompletionRequestFlowtype;
 import com.example.ONDC.sellerApp.AIProductCataloging.exceptions.ONDCProductException;
+import com.example.ONDC.sellerApp.AIProductCataloging.model.DescriptionRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -57,17 +58,17 @@ public class AIController {
     return  response;
   }
 
-  @GetMapping(ENHANCE_DESCRIPTION)
+  @PostMapping(ENHANCE_DESCRIPTION)
   public GenericGenerateResponse<CommonDescriptionResponse> enhanceDescription(
     @RequestParam(name = "title") String title,
     @RequestParam(name = "category") Integer category,
-    @RequestParam(name = "description") String description) throws ONDCProductException {
+    @RequestBody DescriptionRequest descriptionRequest) throws ONDCProductException {
 
-    log.info("[enhanceDescription] Request title: {},category :{}, description :{}", title,category,description);
+    log.info("[enhanceDescription] Request title: {},category :{}, description :{}", title,category,descriptionRequest.getDescription());
     GenericGenerateResponse<CommonDescriptionResponse> response =
       chatCompletionServiceFactory
         .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_DESCRIPTION)
-        .getChatCompletionRecommendation(description, category, title);
+        .getChatCompletionRecommendation(descriptionRequest.getDescription(), category, title);
     log.info("[enhanceDescription] Response: {}", response);
     return  response;
   }
