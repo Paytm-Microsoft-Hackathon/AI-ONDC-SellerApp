@@ -5,6 +5,7 @@ import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.ChatCompleti
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.CommonDescriptionResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenericGenerateResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.ImageData;
+import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.RateLimitingService;
 import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ChatCompletionRequestFlowtype;
 import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class AIController {
 
   @Autowired private AIService aiService;
   @Autowired private ChatCompletionServiceFactory chatCompletionServiceFactory;
+  @Autowired private RateLimitingService rateLimitingService;
 
   @GetMapping(GENERATE_IMAGE)
   public GenericGenerateResponse<ImageData> generateImage(
@@ -76,10 +78,13 @@ public class AIController {
   public GenericGenerateResponse<CommonDescriptionResponse> generateDescription(
     @RequestParam(name = "title") String title,
     @RequestParam(name = "category") Integer category) throws ONDCProductException {
+    if(rateLimitingService.limitRate())
+      return null;
     GenericGenerateResponse<CommonDescriptionResponse> response =
       chatCompletionServiceFactory
         .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.GENERATE_DESCRIPTION)
         .getChatCompletionRecommendation(null, category, title);
+    rateLimitingService.increaseCount("generateDescription");
     log.info("[generateDescription] Response: {}", response);
     return response;
   }
