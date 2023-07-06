@@ -17,6 +17,8 @@ import static com.example.ONDC.sellerApp.AIProductCataloging.Constants.PromtGene
 import static com.example.ONDC.sellerApp.AIProductCataloging.Constants.PromtGenerationConstants.USER_ROLE;
 import static com.example.ONDC.sellerApp.AIProductCataloging.Constants.TITLE;
 import static com.example.ONDC.sellerApp.AIProductCataloging.enums.GenerateDescriptionPrompts.GENERATE_DESCRIPTION_SHORT_LEARNING_INPUT;
+import static com.example.ONDC.sellerApp.AIProductCataloging.enums.GenerateDescriptionPrompts.GENERATE_DESCRIPTION_SHORT_LEARNING_INPUT_FASHION;
+import static com.example.ONDC.sellerApp.AIProductCataloging.enums.GenerateDescriptionPrompts.GENERATE_DESCRIPTION_SHORT_LEARNING_INPUT_FOOD;
 import static com.example.ONDC.sellerApp.AIProductCataloging.enums.GenerateDescriptionPrompts.GENERATE_DESCRIPTION_SHORT_LEARNING_OUTPUT;
 import static com.example.ONDC.sellerApp.AIProductCataloging.enums.GenerateDescriptionPrompts.GENERATE_DESCRIPTION_SHORT_LEARNING_OUTPUT_FASHION;
 import static com.example.ONDC.sellerApp.AIProductCataloging.enums.GenerateDescriptionPrompts.GENERATE_DESCRIPTION_SHORT_LEARNING_OUTPUT_FOOD;
@@ -57,7 +59,7 @@ public class GenerateDescriptionService extends CommonChatCompletionService {
         AIShortLearningDTO.builder()
           .role(SYSTEM_ROLE).content(GENERATE_DESCRIPTION_TONALITY_SETUP_FOOD.getValue()
             .replace(TITLE, description)).build(),
-        AIShortLearningDTO.builder().role(USER_ROLE).content(GENERATE_DESCRIPTION_SHORT_LEARNING_INPUT.getValue()).build(),
+        AIShortLearningDTO.builder().role(USER_ROLE).content(GENERATE_DESCRIPTION_SHORT_LEARNING_INPUT_FOOD.getValue()).build(),
         AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_DESCRIPTION_SHORT_LEARNING_OUTPUT_FOOD.getValue()).build(),
         AIShortLearningDTO.builder().role(USER_ROLE).content(description).build());
 
@@ -65,7 +67,7 @@ public class GenerateDescriptionService extends CommonChatCompletionService {
         AIShortLearningDTO.builder()
           .role(SYSTEM_ROLE).content(GENERATE_DESCRIPTION_TONALITY_SETUP_FASHION.getValue()
             .replace(TITLE, description)).build(),
-        AIShortLearningDTO.builder().role(USER_ROLE).content(GENERATE_DESCRIPTION_SHORT_LEARNING_INPUT.getValue()).build(),
+        AIShortLearningDTO.builder().role(USER_ROLE).content(GENERATE_DESCRIPTION_SHORT_LEARNING_INPUT_FASHION.getValue()).build(),
         AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_DESCRIPTION_SHORT_LEARNING_OUTPUT_FASHION.getValue()).build(),
         AIShortLearningDTO.builder().role(USER_ROLE).content(description).build());
 
