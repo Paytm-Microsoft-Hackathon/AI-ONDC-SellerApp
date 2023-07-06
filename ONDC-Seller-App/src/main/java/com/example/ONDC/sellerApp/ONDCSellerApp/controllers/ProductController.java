@@ -30,7 +30,7 @@ public class ProductController {
 
   @Autowired private ProductService productService;
 
-  @PostMapping
+  @PostMapping("/old")
   public GenericGenerateResponse<String> addProduct(
       @RequestPart(name = "title") String title,
       @RequestPart(name = "description") String description,
@@ -53,7 +53,7 @@ public class ProductController {
     return productService.getProducts(offset, limit);
   }
 
-  @PostMapping("/new")
+  @PostMapping
   public GenericGenerateResponse<String> addProductV2(
       @RequestPart(name = "data") String data,
       @RequestPart(name = "images", required = false) List<MultipartFile> images) throws ONDCProductException, IOException {
