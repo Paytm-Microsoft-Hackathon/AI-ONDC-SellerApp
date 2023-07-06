@@ -21,7 +21,7 @@ import javax.persistence.EntityManagerFactory;
 @EnableJpaRepositories(
   entityManagerFactoryRef = "entityManagerFactorySlave",
   transactionManagerRef = "transactionManagerSlave",
-  basePackages = {"com.example.ONDC.sellerApp.ONDCSellerApp.db.repo.slave"})
+  basePackages = {"com.example.ONDC.sellerApp.AIProductCataloging.db.repo.slave"})
 public class DataSourceSlaveConfiguration {
 
   @Bean
@@ -42,7 +42,7 @@ public class DataSourceSlaveConfiguration {
   @Bean(name = "entityManagerFactorySlave")
   public LocalContainerEntityManagerFactoryBean slaveEntityManagerFactory(
     EntityManagerFactoryBuilder builder) {
-    return builder.dataSource(slaveDataSource()).packages("com.example.ONDC.sellerApp.ONDCSellerApp.db.entity").build();
+    return builder.dataSource(slaveDataSource()).packages("com.example.ONDC.sellerApp.AIProductCataloging.db.entity").build();
   }
 
   @Bean(name = "transactionManagerSlave")

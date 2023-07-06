@@ -12,6 +12,7 @@ import com.example.ONDC.sellerApp.AIProductCataloging.model.AddProductRequest;
 import com.example.ONDC.sellerApp.AIProductCataloging.model.FetchProductResponse;
 import com.example.ONDC.sellerApp.AIProductCataloging.util.FileUtil;
 import com.example.ONDC.sellerApp.AIProductCataloging.util.OffsetBasedPageRequest;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +38,9 @@ import static com.example.ONDC.sellerApp.AIProductCataloging.enums.ProductExcept
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-  @Autowired private ProductMasterRepository productMasterRepository;
-  @Autowired private AIService aiService;
-  @Autowired ProductSlaveRepository productSlaveRepository;
+   private final ProductMasterRepository productMasterRepository;
+   private final AIService aiService;
+   private final ProductSlaveRepository productSlaveRepository;
 
   public void addProduct(AddProductRequest request,
                            List<MultipartFile> images) throws ONDCProductException, IOException {

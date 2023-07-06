@@ -19,7 +19,7 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = {"com.example.ONDC.sellerApp.ONDCSellerApp.db.repo.master"})
+@EnableJpaRepositories(basePackages = {"com.example.ONDC.sellerApp.AIProductCataloging.db.repo.master"})
 public class DataSourceMasterConfiguration {
 
   @Bean
@@ -43,7 +43,7 @@ public class DataSourceMasterConfiguration {
   @Primary
   public LocalContainerEntityManagerFactoryBean masterEntityManagerFactory(
     EntityManagerFactoryBuilder builder) {
-    return builder.dataSource(masterDataSource()).packages("com.example.ONDC.sellerApp.ONDCSellerApp.db.entity").build();
+    return builder.dataSource(masterDataSource()).packages("com.example.ONDC.sellerApp.AIProductCataloging.db.entity").build();
   }
 
   @Bean(name = "transactionManager")
