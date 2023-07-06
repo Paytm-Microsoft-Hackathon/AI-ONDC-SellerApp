@@ -43,7 +43,6 @@ public class ProductService {
 
   public void addProduct(AddProductRequest request,
                            List<MultipartFile> images) throws ONDCProductException, IOException {
-
     validateAddProductRequest(request);
     List<String> imageFilePath = saveAndGenerateLocalFilePath(images, request.getImageUrl(), request.getTitle());
     checkForAdultContent(imageFilePath);
