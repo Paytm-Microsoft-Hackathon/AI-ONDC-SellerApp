@@ -105,13 +105,15 @@ public class ProductService {
       FilterAdultContentResponse response = aiService.filterAdultContent(image);
       if (Objects.nonNull(response)
           && Objects.nonNull(response.getAdult())
-          && Boolean.TRUE.equals(response.getAdult().getIsAdultContent())) {
+          && (Boolean.TRUE.equals(response.getAdult().getIsAdultContent())
+          || Boolean.TRUE.equals(response.getAdult().getIsGoryContent())
+          || Boolean.TRUE.equals(response.getAdult().getIsRacyContent()))) {
         counter++;
       }
     }
 
     if (counter > 0) {
-      log.warn("[checkForAdultContent] {} image contains adult content", counter);
+      log.warn("[checkForAdultContent] {} image contains inappropriate content", counter);
       throw new ONDCProductException(String.format(IMAGE_CONTAINS_ADULT_CONTENT.getMessage(), counter),
           IMAGE_CONTAINS_ADULT_CONTENT.getCode(), HttpStatus.BAD_REQUEST);
     }
