@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum GenerateAdditionalDescriptionPrompts {
-  GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP("Act like a senior nutritionist and find and list down only the nutrition content table for 100g of chicken in a brief tone"),
+  GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP("Act like a senior nutritionist and find and list down only the nutrition content table for 100g of chicken in a brief and positive tone."),
   GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT("peanuts"),
   GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_OUTPUT("Nutrition Content per 100g:\\n- Calories: 567 kcal\\n- Carbohydrates: 16.1 g\\n- Fiber: 8.5 g\\n- Sugars: 4.7 g\\n- Protein: 25.8 g\\n- Fat: 49.2 g\\n- Saturated fat: 6.28 g\\n- Monounsaturated fat: 24.4 g\\n- Polyunsaturated fat: 15.6 g\\n- Omega-3 fatty acids: 0 g\\n- Omega-6 fatty acids: 15.6 g\\n- Vitamin B1 (Thiamine): 0.64 mg\\n- Vitamin B2 (Riboflavin): 0.14 mg\\n- Vitamin B3 (Niacin): 12.1 mg\\n- Vitamin B5 (Pantothenic acid): 1.8 mg\\n- Vitamin B6 (Pyridoxine): 0.35 mg\\n- Vitamin B9 (Folate): 240 mcg\\n- Vitamin E: 8.33 mg\\n- Calcium: 92 mg\\n- Iron: 4.6 mg\\n- Magnesium: 168 mg\\n- Phosphorus: 376 mg\\n- Potassium: 705 mg\\n- Zinc: 3.27 mg"),
   GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT2("paneer"),
