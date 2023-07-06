@@ -44,7 +44,7 @@ public class GenerateAdditionalDescriptionService extends CommonChatCompletionSe
   private List<AIShortLearningDTO> getMessageList(String description, Integer category) {
     return switch (category) {
       case 1, 2, 3 -> Arrays.asList(
-        AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP.getValue()).build(),
+        AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(String.format(GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP.getValue(), description)).build(),
         AIShortLearningDTO.builder().role(USER_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT.getValue()).build(),
         AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_OUTPUT.getValue()).build(),
         AIShortLearningDTO.builder().role(USER_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT2.getValue()).build(),
@@ -52,7 +52,7 @@ public class GenerateAdditionalDescriptionService extends CommonChatCompletionSe
         AIShortLearningDTO.builder().role(USER_ROLE).content(description).build());
 
       case 5 -> Arrays.asList(
-        AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP_BEVERAGES.getValue()).build(),
+        AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(String.format(GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP_BEVERAGES.getValue(), description)).build(),
         AIShortLearningDTO.builder().role(USER_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT.getValue()).build(),
         AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_OUTPUT.getValue()).build(),
         AIShortLearningDTO.builder().role(USER_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT2.getValue()).build(),
@@ -60,7 +60,7 @@ public class GenerateAdditionalDescriptionService extends CommonChatCompletionSe
         AIShortLearningDTO.builder().role(USER_ROLE).content(description).build());
 
       case 6 -> Arrays.asList(
-        AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP_FASHION.getValue()).build(),
+        AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(String.format(GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP_FASHION.getValue(), description)).build(),
         AIShortLearningDTO.builder().role(USER_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT_FASHION.getValue()).build(),
         AIShortLearningDTO.builder().role(SYSTEM_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_OUTPUT_FASHION.getValue()).build(),
         AIShortLearningDTO.builder().role(USER_ROLE).content(GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT2.getValue()).build(),

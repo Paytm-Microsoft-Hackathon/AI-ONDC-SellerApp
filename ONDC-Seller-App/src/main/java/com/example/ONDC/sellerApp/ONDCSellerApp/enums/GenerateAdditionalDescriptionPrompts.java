@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum GenerateAdditionalDescriptionPrompts {
-  GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP("Act like a senior nutritionist and find and list down only the nutrition content table for 100g of chicken in a brief and positive tone."),
+  GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP("Act like a senior nutritionist and find and list down only the nutrition content table for %s in a brief and positive tone."),
   GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT("peanuts"),
   GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_OUTPUT("Nutrition Content per 100g:\\n- Calories: 567 kcal\\n- Carbohydrates: 16.1 g\\n- Fiber: 8.5 g\\n- Sugars: 4.7 g\\n- Protein: 25.8 g\\n- Fat: 49.2 g\\n- Saturated fat: 6.28 g\\n- Monounsaturated fat: 24.4 g\\n- Polyunsaturated fat: 15.6 g\\n- Omega-3 fatty acids: 0 g\\n- Omega-6 fatty acids: 15.6 g\\n- Vitamin B1 (Thiamine): 0.64 mg\\n- Vitamin B2 (Riboflavin): 0.14 mg\\n- Vitamin B3 (Niacin): 12.1 mg\\n- Vitamin B5 (Pantothenic acid): 1.8 mg\\n- Vitamin B6 (Pyridoxine): 0.35 mg\\n- Vitamin B9 (Folate): 240 mcg\\n- Vitamin E: 8.33 mg\\n- Calcium: 92 mg\\n- Iron: 4.6 mg\\n- Magnesium: 168 mg\\n- Phosphorus: 376 mg\\n- Potassium: 705 mg\\n- Zinc: 3.27 mg"),
   GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT2("paneer"),
   GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_OUTPUT2("Nutrition Content per 100g:\\n- Calories: 265 kcal\\n- Carbohydrates: 1.2 g\\n- Fiber: 0 g\\n- Sugars: 1.2 g\\n- Protein: 18.3 g\\n- Fat: 21.4 g\\n- Saturated fat: 13.8 g\\n- Monounsaturated fat: 5.4 g\\n- Polyunsaturated fat: 0.6 g\\n- Omega-3 fatty acids: 0 g\\n- Omega-6 fatty acids: 0.6 g\\n- Vitamin B2 (Riboflavin): 0.2 mg\\n- Vitamin B9 (Folate): 16 mcg\\n- Calcium: 208 mg\\n- Phosphorus: 138 mg\\n- Sodium: 1 mg\\n- Potassium: 39 mg\\n- Zinc: 0.4 mg"),
-  GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP_BEVERAGES("Act like a senior nutritionist and find and list down only the nutrition content table for a serving of Pepsi in a brief tone"),
-  GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP_FASHION("Act like a fashion designer and help me figure out how to style a Uiriuy Men's Men Regular Fit Floral Print Cut Away Collar Casual Shirt in a brief tone"),
+  GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP_BEVERAGES("Act like a senior nutritionist and find and list down only the nutrition content table for a serving of %s in a brief tone"),
+  GENERATE_ADDITIONAL_DESCRIPTION_TONALITY_SETUP_FASHION("Act like a fashion designer and help me figure out how to style a %s in a brief tone"),
   GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT_FASHION("Leather Adda biker mens leather jacket"),
   GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_OUTPUT_FASHION("For styling a Leather Adda biker mens leather jacket, heres how to create a stylish look. \\nClassic Cool: Pair the Leather Adda biker jacket with a plain white T-shirt, slim-fit black jeans, and black leather boots." +
     " Complete the look with a black leather belt and aviator sunglasses for a timeless and effortlessly cool style.\\nEdgy Attitude: Combine the jacket with a graphic printed tee, ripped black jeans, and chunky black boots. Add some statement accessories like a studded belt, metal chains," +
