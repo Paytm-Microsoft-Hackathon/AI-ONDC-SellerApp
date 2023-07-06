@@ -31,5 +31,7 @@ public class Constants {
     public static final String USER_ROLE = "user";
     public static final String SYSTEM_ROLE = "system";
     public static final String OTHER_PRODUCT_CATEGORY = "One specific";
+    public static final int FIXED_TEMPERATURE = 1;
+    public static final double FIXED_TOP_P = 0.95;
   }
 }

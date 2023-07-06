@@ -30,23 +30,6 @@ public class ProductController {
 
   @Autowired private ProductService productService;
 
-  @PostMapping("/old")
-  public GenericGenerateResponse<String> addProduct(
-      @RequestPart(name = "title") String title,
-      @RequestPart(name = "description") String description,
-      @RequestPart(name = "category") Integer category,
-      @RequestPart(name = "additional_description", required = false) String additionalInfo,
-      @RequestPart(name = "created_by") String createdBy,
-      @RequestPart(name = "price") double price,
-      @RequestPart(name = "net_quantity", required = false) String netQuantity,
-      @RequestPart(name = "images", required = false) List<MultipartFile> images,
-      @RequestPart(name = "image_url", required = false) List<String> imageUrl) throws ONDCProductException, IOException {
-    log.info("[addProduct] Request received | title: {}", title);
-    productService.addProduct(title, description, category, additionalInfo, createdBy, price, netQuantity, images, imageUrl);
-    log.info("[addProduct] Request success | title: {}", title);
-    return new GenericGenerateResponse<>(SUCCESS);
-  }
-
   @GetMapping
   public List<FetchProductResponse> getProducts(@RequestParam(name = "offset", defaultValue = "0") int offset,
                                                 @RequestParam(name = "limit", defaultValue = "10") int limit)  {
@@ -54,12 +37,12 @@ public class ProductController {
   }
 
   @PostMapping
-  public GenericGenerateResponse<String> addProductV2(
+  public GenericGenerateResponse<String> addProduct(
       @RequestPart(name = "data") String data,
       @RequestPart(name = "images", required = false) List<MultipartFile> images) throws ONDCProductException, IOException {
     AddProductRequest request = JsonUtil.parseJson(data, AddProductRequest.class);
     log.info("[addProduct] Request received | request: {}", request);
-    productService.addProductV2(request, images);
+    productService.addProduct(request, images);
     log.info("[addProduct] Request success | request: {}", request);
     return new GenericGenerateResponse<>(SUCCESS);
   }

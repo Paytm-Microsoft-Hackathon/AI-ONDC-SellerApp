@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.core.io.Resource;
 
 import javax.persistence.Column;
 import java.util.List;
@@ -35,6 +36,9 @@ public class FetchProductResponse {
   @JsonProperty("net_quantity")
   private String netQuantity;
 
-  @Column(name = "images")
+  @JsonProperty("images")
   private List<String> imageUrls;
+
+  @JsonProperty("images_stream")
+  private List<byte[]> imageStream;
 }

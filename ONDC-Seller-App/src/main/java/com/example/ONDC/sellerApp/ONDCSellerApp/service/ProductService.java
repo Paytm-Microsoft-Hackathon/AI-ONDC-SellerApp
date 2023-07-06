@@ -2,7 +2,6 @@ package com.example.ONDC.sellerApp.ONDCSellerApp.service;
 
 import com.example.ONDC.sellerApp.ONDCSellerApp.db.entity.Product;
 import com.example.ONDC.sellerApp.ONDCSellerApp.db.entity.ProductMetaInfo;
-import com.example.ONDC.sellerApp.ONDCSellerApp.db.entity.Product;
 import com.example.ONDC.sellerApp.ONDCSellerApp.db.repo.master.ProductMasterRepository;
 import com.example.ONDC.sellerApp.ONDCSellerApp.db.repo.slave.ProductSlaveRepository;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.AIService;
@@ -21,12 +20,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,29 +41,13 @@ public class ProductService {
   @Autowired private AIService aiService;
   @Autowired ProductSlaveRepository productSlaveRepository;
 
-  public void addProduct(String title,
-                         String description,
-                         Integer category,
-                         String additionalInfo,
-                         String createdBy,
-                         double price,
-                         String netQuantity,
-                         List<MultipartFile> images,
-                         List<String> imageUrl) throws ONDCProductException, IOException {
-
-    List<String> imageFilePath = saveAndGenerateLocalFilePath(images, imageUrl, title);
-    checkForAdultContent(imageFilePath);
-    saveProductInDb(title, description, category, additionalInfo, createdBy, price, netQuantity, imageFilePath);
-  }
-
-  public void addProductV2(AddProductRequest request,
+  public void addProduct(AddProductRequest request,
                            List<MultipartFile> images) throws ONDCProductException, IOException {
 
     validateAddProductRequest(request);
     List<String> imageFilePath = saveAndGenerateLocalFilePath(images, request.getImageUrl(), request.getTitle());
     checkForAdultContent(imageFilePath);
-    saveProductInDb(request.getTitle(), request.getDescription(), request.getCategory(), request.getAdditionalInfo(),
-        request.getCreatedBy(), request.getPrice(), request.getNetQuantity(), imageFilePath);
+    saveProductInDb(request, imageFilePath);
   }
 
   private void validateAddProductRequest(AddProductRequest request) throws ONDCProductException {
@@ -119,28 +103,22 @@ public class ProductService {
     }
   }
 
-  private void saveProductInDb(String title,
-                               String description,
-                               Integer category,
-                               String additionalInfo,
-                               String createdBy,
-                               double price,
-                               String netQuantity,
+  private void saveProductInDb(AddProductRequest request,
                                List<String> filePaths) {
     Product product =
         Product
             .builder()
-            .title(title)
-            .description(description)
-            .productCategory(ProductCategory.fromValue(category))
-            .additionalDescription(additionalInfo)
-            .createdBy(createdBy)
-            .price(price)
-            .netQuantity(netQuantity)
+            .title(request.getTitle())
+            .description(request.getDescription())
+            .productCategory(ProductCategory.fromValue(request.getCategory()))
+            .additionalDescription(request.getAdditionalInfo())
+            .createdBy(request.getCreatedBy())
+            .price(request.getPrice())
+            .netQuantity(request.getNetQuantity())
             .metaInfo(ProductMetaInfo.builder().imagesPath(filePaths).build())
             .build();
     product = productMasterRepository.save(product);
-    log.info("[saveProductInDb] Product created successfully with id: {} | title: {}", product.getId(), title);
+    log.info("[saveProductInDb] Product created successfully with id: {} | title: {}", product.getId(), request.getTitle());
   }
 
   public List<FetchProductResponse> getProducts(int offset, int limit) {
@@ -150,18 +128,35 @@ public class ProductService {
         Sort.by(new Sort.Order(Sort.Direction.DESC, "id"))));
     List<Product> products = productInPages.getContent();
     List<FetchProductResponse> response = new ArrayList<>();
-    products.forEach(product -> {
-      response.add(FetchProductResponse
-          .builder()
-          .title(product.getTitle())
-          .description(product.getDescription())
-          .productCategory(product.getProductCategory().getValue())
-          .createdBy(product.getCreatedBy())
-          .price(product.getPrice())
-          .netQuantity(product.getNetQuantity())
-          .imageUrls(Objects.nonNull(product.getMetaInfo()) ? product.getMetaInfo().getImagesPath() : new ArrayList<>())
-          .build());
-    });
+    products.forEach(product -> response.add(FetchProductResponse
+        .builder()
+        .title(product.getTitle())
+        .description(product.getDescription())
+        .productCategory(product.getProductCategory().getValue())
+        .createdBy(product.getCreatedBy())
+        .price(product.getPrice())
+        .netQuantity(product.getNetQuantity())
+        .imageUrls(Objects.nonNull(product.getMetaInfo()) ? product.getMetaInfo().getImagesPath() : new ArrayList<>())
+        .imageStream(getImage(product.getMetaInfo()))
+        .build()));
     return response;
+  }
+
+  private List<byte[]> getImage(ProductMetaInfo metaInfo) {
+
+    List<byte[]> images = new ArrayList<>();
+    if (Objects.isNull(metaInfo) || CollectionUtils.isEmpty(metaInfo.getImagesPath())) {
+      return images;
+    }
+
+    metaInfo.getImagesPath().forEach(imagePath -> {
+      try (FileInputStream fileInputStream = new FileInputStream(imagePath)) {
+      images.add(StreamUtils.copyToByteArray(fileInputStream));
+      } catch (Exception ex) {
+        log.error("[getImage] Error while parsin image | path: {} | error: ", imagePath, ex);
+      }
+    });
+
+    return images;
   }
 }

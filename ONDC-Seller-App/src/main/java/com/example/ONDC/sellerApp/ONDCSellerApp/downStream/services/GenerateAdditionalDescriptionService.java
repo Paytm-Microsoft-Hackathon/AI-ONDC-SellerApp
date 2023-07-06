@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.PromtGenerationConstants.FIXED_TEMPERATURE;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.PromtGenerationConstants.FIXED_TOP_P;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.PromtGenerationConstants.SYSTEM_ROLE;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.PromtGenerationConstants.USER_ROLE;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.GenerateAdditionalDescriptionPrompts.GENERATE_ADDITIONAL_DESCRIPTION_SHORT_LEARNING_INPUT;
@@ -34,6 +36,8 @@ public class GenerateAdditionalDescriptionService extends CommonChatCompletionSe
     return AIChatCompletionRequest.builder()
       .maxTokens(tokenSize)
       .messages(getMessageList(description, category))
+      .temperature(FIXED_TEMPERATURE)
+      .topP(FIXED_TOP_P)
       .build();
   }
 

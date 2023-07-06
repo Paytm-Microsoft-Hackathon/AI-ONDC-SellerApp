@@ -21,10 +21,10 @@ public class AIChatCompletionRequest {
   private double topP = 0.95;
 
   @JsonProperty("frequency_penalty")
-  private double frequencyPenalty = 0;
+  private int frequencyPenalty = 0;
 
   @JsonProperty("presence_penalty")
-  private double presencePenalty = 0;
+  private int presencePenalty = 0;
 
   @JsonProperty("max_tokens")
   private int maxTokens;
