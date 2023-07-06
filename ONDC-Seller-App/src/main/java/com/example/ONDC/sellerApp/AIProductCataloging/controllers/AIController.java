@@ -60,15 +60,13 @@ public class AIController {
 
   @PostMapping(ENHANCE_DESCRIPTION)
   public GenericGenerateResponse<CommonDescriptionResponse> enhanceDescription(
-    @RequestParam(name = "title") String title,
-    @RequestParam(name = "category") Integer category,
     @RequestBody DescriptionRequest descriptionRequest) throws ONDCProductException {
 
-    log.info("[enhanceDescription] Request title: {},category :{}, description :{}", title,category,descriptionRequest.getDescription());
+    log.info("[enhanceDescription] Request title: {},category :{}, description :{}",descriptionRequest.getTitle(),descriptionRequest.getCategory(),descriptionRequest.getDescription());
     GenericGenerateResponse<CommonDescriptionResponse> response =
       chatCompletionServiceFactory
         .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_DESCRIPTION)
-        .getChatCompletionRecommendation(descriptionRequest.getDescription(), category, title);
+        .getChatCompletionRecommendation(descriptionRequest.getDescription(), descriptionRequest.getCategory(), descriptionRequest.getTitle());
     log.info("[enhanceDescription] Response: {}", response);
     return  response;
   }
