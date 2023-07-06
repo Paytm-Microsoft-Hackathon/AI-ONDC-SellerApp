@@ -30,6 +30,6 @@ public class AddProductRequest {
   @JsonProperty("net_quantity")
   private String netQuantity;
 
-  @JsonProperty("image_url")
+  @JsonProperty("images")
   private List<String> imageUrl;
 }
