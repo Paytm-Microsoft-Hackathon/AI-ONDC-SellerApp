@@ -18,10 +18,10 @@ public abstract class CommonChatCompletionService {
   @Autowired private AIService aiService;
 
   abstract int getMaxTokenSize();
-  abstract AIChatCompletionRequest getChatCompletionRequest(String description , int tokenSize, Integer category);
+  abstract AIChatCompletionRequest getChatCompletionRequest(String description , int tokenSize, Integer category, String title);
 
-  public GenericGenerateResponse<CommonDescriptionResponse> getChatCompletionRecommendation(String description, Integer category) throws ONDCProductException {
-    AIChatCompletionRequest request = getChatCompletionRequest(description, getMaxTokenSize(), category);
+  public GenericGenerateResponse<CommonDescriptionResponse> getChatCompletionRecommendation(String description, Integer category, String title) throws ONDCProductException {
+    AIChatCompletionRequest request = getChatCompletionRequest(description, getMaxTokenSize(), category,title);
     ChatCompletionResponse response = aiService.chatCompletionAI(request);
     if (Objects.nonNull(response)
       && !CollectionUtils.isEmpty(response.getChoices())

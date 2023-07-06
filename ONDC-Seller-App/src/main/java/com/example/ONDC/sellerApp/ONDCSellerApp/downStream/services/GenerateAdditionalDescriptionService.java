@@ -32,10 +32,10 @@ public class GenerateAdditionalDescriptionService extends CommonChatCompletionSe
   }
 
   @Override
-  public AIChatCompletionRequest getChatCompletionRequest(String description, int tokenSize, Integer category) {
+  public AIChatCompletionRequest getChatCompletionRequest(String description, int tokenSize, Integer category, String title) {
     return AIChatCompletionRequest.builder()
       .maxTokens(tokenSize)
-      .messages(getMessageList(description, category))
+      .messages(getMessageList(title, category))
       .temperature(FIXED_TEMPERATURE)
       .topP(FIXED_TOP_P)
       .build();

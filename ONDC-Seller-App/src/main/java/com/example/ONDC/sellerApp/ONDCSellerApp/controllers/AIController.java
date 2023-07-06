@@ -52,7 +52,7 @@ public class AIController {
     GenericGenerateResponse<CommonDescriptionResponse> response =
         chatCompletionServiceFactory
             .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_TITLE)
-            .getChatCompletionRecommendation(title, category);
+            .getChatCompletionRecommendation(null, category, title);
     log.info("[enhanceDescription] Response: {}", response);
     return  response;
   }
@@ -60,13 +60,14 @@ public class AIController {
   @GetMapping(ENHANCE_DESCRIPTION)
   public GenericGenerateResponse<CommonDescriptionResponse> enhanceDescription(
     @RequestParam(name = "title") String title,
-    @RequestParam(name = "category") Integer category) throws ONDCProductException {
+    @RequestParam(name = "category") Integer category,
+    @RequestParam(name = "description") String description) throws ONDCProductException {
 
-    log.info("[enhanceDescription] Request title: {}", title);
+    log.info("[enhanceDescription] Request title: {},category :{}, description :{}", title,category,description);
     GenericGenerateResponse<CommonDescriptionResponse> response =
       chatCompletionServiceFactory
         .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.ENHANCE_DESCRIPTION)
-        .getChatCompletionRecommendation(title,category);
+        .getChatCompletionRecommendation(description, category, title);
     log.info("[enhanceDescription] Response: {}", response);
     return  response;
   }
@@ -78,7 +79,7 @@ public class AIController {
     GenericGenerateResponse<CommonDescriptionResponse> response =
       chatCompletionServiceFactory
         .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.GENERATE_DESCRIPTION)
-        .getChatCompletionRecommendation(title, category);
+        .getChatCompletionRecommendation(null, category, title);
     log.info("[generateDescription] Response: {}", response);
     return response;
   }
@@ -90,7 +91,7 @@ public class AIController {
     GenericGenerateResponse<CommonDescriptionResponse> response =
       chatCompletionServiceFactory
         .getChatCompletionServiceBasedOnFlowtype(ChatCompletionRequestFlowtype.GENERATE_ADDITIONAL_DESCRIPTION)
-        .getChatCompletionRecommendation(title, category);
+        .getChatCompletionRecommendation(null, category, title);
     log.info("[generateAdditionalDescription] Response: {}", response);
     return response;
   }

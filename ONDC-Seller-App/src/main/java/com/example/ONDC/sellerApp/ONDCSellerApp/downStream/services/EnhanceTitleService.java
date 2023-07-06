@@ -26,7 +26,7 @@ public class EnhanceTitleService extends CommonChatCompletionService {
   }
 
   @Override
-  public AIChatCompletionRequest getChatCompletionRequest(String title, int tokenSize, Integer category) {
+  public AIChatCompletionRequest getChatCompletionRequest(String description, int tokenSize, Integer category, String title) {
     String productCategory =
         Objects.nonNull(ProductCategory.fromValue(category))
             ? ProductCategory.fromValue(category).getName() : OTHER_PRODUCT_CATEGORY;
