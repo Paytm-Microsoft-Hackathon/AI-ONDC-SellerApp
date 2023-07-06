@@ -147,6 +147,7 @@ public class RestTemplateService {
       try {
         log.info("url: {}, entity: {}, class: {}", builder.toUriString(), httpEntity, clazz);
         responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, httpEntity, clazz);
+        log.info("url: {}, response: {}", builder.toUriString(), responseEntity.getBody());
         return responseEntity.getBody();
       } catch (Exception e) {
         log.error("SOMETHING WENT WRONG ERROR: ", e);

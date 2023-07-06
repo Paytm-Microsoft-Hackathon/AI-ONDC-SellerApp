@@ -15,6 +15,12 @@ public class Constants {
   public static final String GENERATE_DESCRIPTION = "/generate/description";
   public static final String ENHANCE_DESCRIPTION = "/enhance/description";
   public static final String GENERATE_ADDITIONAL_DESCRIPTION = "/generate/additionalDescription";
+  public static final String VISUAL_FEATURES = "visualFeatures";
+  public static final String CHECK_ADULT = "Adult";
+  public static final String FILTER_ADULT_CONTENT_KEY_HEADER = "Ocp-Apim-Subscription-Key";
+  public static final String FILTER_ADULT_CONTENT_KEY = "883d0b6426834e5998a9be11041247a2";
+  public static final String TITLE = "{title}";
+  public static final String CATEGORY = "{category}";
 
   public static class ProductControllerConstants {
     public static final String PRODUCT_BASE_URL = "/api/v1/product";
@@ -24,5 +30,6 @@ public class Constants {
   public static class PromtGenerationConstants {
     public static final String USER_ROLE = "user";
     public static final String SYSTEM_ROLE = "system";
+    public static final String OTHER_PRODUCT_CATEGORY = "One specific";
   }
 }

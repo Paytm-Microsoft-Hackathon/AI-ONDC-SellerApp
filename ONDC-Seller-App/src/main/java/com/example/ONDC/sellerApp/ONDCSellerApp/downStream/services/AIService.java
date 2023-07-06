@@ -2,6 +2,7 @@ package com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services;
 
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.AIChatCompletionRequest;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.ChatCompletionResponse;
+import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.FilterAdultContentResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenerateImageRestApiImageRequest;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenerateImageRestApiImageResponse;
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GenericGenerateResponse;
@@ -9,10 +10,12 @@ import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.GetHe
 import com.example.ONDC.sellerApp.ONDCSellerApp.downStream.services.Models.ImageData;
 import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ImageGenerationPrompt;
 import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ProductCategory;
+import com.example.ONDC.sellerApp.ONDCSellerApp.enums.ProductException;
 import com.example.ONDC.sellerApp.ONDCSellerApp.exceptions.ONDCProductException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +40,7 @@ import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.CHAT_COMPLETION
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.CONTENT_TYPE;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.Constants.OPEN_AI_IMAGE_REDIRECTION_URL;
 import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.AzureEndpoints.CHAT_COMPLETION;
+import static com.example.ONDC.sellerApp.ONDCSellerApp.enums.AzureEndpoints.FILTER_ADULT_CONTENT;
 
 @Slf4j
 @Service
@@ -102,4 +107,19 @@ public class AIService {
             CHAT_COMPLETION.getValue(), ChatCompletionResponse.class, request, headers, params);
   }
 
+  public FilterAdultContentResponse filterAdultContent(String filepath) throws ONDCProductException {
+      Map<String, String> headers = new HashMap<>();
+      headers.put(FILTER_ADULT_CONTENT_KEY_HEADER, FILTER_ADULT_CONTENT_KEY);
+      MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+      params.put(VISUAL_FEATURES, Collections.singletonList(CHECK_ADULT));
+      MultiValueMap<String, Object> request = new LinkedMultiValueMap<>();
+      try (FileInputStream fileInputStream = new FileInputStream(filepath)) {
+        request.add("file", new InputStreamResource(fileInputStream));
+        return restTemplateService.executePostRequestV3(
+            FILTER_ADULT_CONTENT.getValue(), FilterAdultContentResponse.class, request, headers, params);
+      } catch (Exception ex) {
+        log.error("[filterAdultContent] Error occurred in api: {} | filepath: {}", FILTER_ADULT_CONTENT.getValue(), filepath, ex);
+        throw new ONDCProductException(ProductException.SOMETHING_WENT_WRONG);
+      }
+  }
 }

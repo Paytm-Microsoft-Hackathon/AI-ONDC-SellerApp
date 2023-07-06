@@ -45,7 +45,7 @@ public class Product {
   private String additionalDescription;
 
   @Column(name = "created_by")
-  private Long createdBy;
+  private String createdBy;
 
   @Column(name = "price")
   private double price;
