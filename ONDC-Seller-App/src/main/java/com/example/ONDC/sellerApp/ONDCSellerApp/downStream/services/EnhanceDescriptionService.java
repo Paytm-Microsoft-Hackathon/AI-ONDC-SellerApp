@@ -21,7 +21,7 @@ public class EnhanceDescriptionService extends CommonChatCompletionService{
 
   @Override
   public int getMaxTokenSize() {
-    return 100;
+    return 600;
   }
 
   @Override
